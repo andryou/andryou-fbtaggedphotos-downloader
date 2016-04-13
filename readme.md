@@ -1,5 +1,5 @@
 # andryou facebook tagged photos downloader
-A userscript that allows people to quickly download all photos they are tagged in.
+A userscript that allows people to quickly download all photos they are tagged in. It is highly recommended that you use Chrome when running this script (to download photos without having to click on prompts).
 
 ## Features
 * Activates all years and months before proceeding to ensure it doesn't miss any activity
