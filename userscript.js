@@ -4,7 +4,7 @@
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
 // @version			1.0
-// @description		Download all photos that you are tagged in.
+// @description		Download all Facebook photos that you are tagged in.
 // ==/UserScript==
 
 /*
