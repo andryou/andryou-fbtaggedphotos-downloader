@@ -6,7 +6,7 @@ A userscript that allows people to quickly download all photos they are tagged i
 * Code is fully available for scrutiny/review
 
 ## To Use
-1. Install Tamper Monkey (Chrome) or Greasemonkey (Firefox)
+1. Install Tamper Monkey (Chrome) or Greasemonkey (Firefox). Then install the userscript from Greasy Fork: https://greasyfork.org/en/scripts/18753-andrew-s-tagged-photos-downloader
 2. Log into Facebook, then go to your Activity Log.
 3. Click on "Posts You're Tagged In" in the left-hand navigation menu
 4. Click on the "Download Photos" button in the main timeline
