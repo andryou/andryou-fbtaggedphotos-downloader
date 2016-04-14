@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity?privacy_source=activity_log&log_filter=cluster_200
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.7
+// @version			1.8
 // @description		Download all Facebook photos that you are tagged in.
 // ==/UserScript==
 
@@ -20,7 +20,7 @@ var retries = 10;
 
 // Inject buttons into page
 $(document).ready(function() {
-    $('#pagelet_main_column_personal div [class="_2o3t fixed_elem"] div[class="clearfix uiHeaderTop"]').append('<input type="button" id="andrewfbdl" value="Download Photos">');
+    $('#pagelet_main_column_personal div [class="_2o3t fixed_elem"] div[class="clearfix uiHeaderTop"]').append('<input type="button" id="andrewfbdl" value="Download Photos"><style>.fbprocessed { background-color: #9AFF9A; }</style>');
     $('#andrewfbdl').click(triggerdl);
 });
 function triggerdl() {
@@ -63,12 +63,12 @@ function andrewhandler() {
 }
 
 function dlphoto() {
-    setTimeout(andrewhandler, 2000);
-    code = $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first td._5ep6 a img").attr('src');
+	setTimeout(andrewhandler, 2000);
+	code = $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first td._5ep6 a img").attr('src');
 	regexp = /\/[0-9]+_([0-9]+)_[0-9]+_/g;
 	match = regexp.exec(code);
 	if (match[1]) {
 		$("body").append("<iframe class='picdl' src='https://www.facebook.com/photo/download/?fbid="+match[1]+"' style='display: none;'></iframe>");
 	}
-    $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first").addClass('fbprocessed');
+	$("#fbTimelineLogBody div._5shk:not(.fbprocessed):first").addClass('fbprocessed');
 }
