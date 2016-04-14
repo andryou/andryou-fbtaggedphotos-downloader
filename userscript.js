@@ -3,7 +3,6 @@
 // @include			https://www.facebook.com/*/allactivity?privacy_source=activity_log&log_filter=cluster_200
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.3
 // @description		Download all Facebook photos that you are tagged in.
 // ==/UserScript==
 
@@ -14,9 +13,11 @@ this.$ = this.jQuery = jQuery.noConflict(true);
 
 // Variables
 var fbname = document.title;
+var inited = false;
 var firstrun = false;
 var retry = 0;
 var retries = 10;
+var activityheight = 0;
 
 // Inject buttons into page
 $(document).ready(function() {
@@ -46,42 +47,66 @@ function triggerdl() {
 
 // Behold: the master function.
 function andrewhandler() {
-	if (!firstrun) {
-		scrollTo(0, 0);
-		firstrun = true;
-	}
-	if (retry < retries) {
-		if ($('iframe.picdl').length && $('iframe.picdl').length > 5) {
-			$('iframe.picdl:first').remove();
-		}
-		if (!$("#fbTimelineLogBody div._5shk:not(.fbprocessed)").length) {
-			scrollTo(0, 10000);
-			setTimeout(function() { andrewhandler(); }, 1000);
-			retry++;
-			console.log('Seems to be done. '+retry+'/'+retries);
-		} else {
-			retry = 0;
-			contents = $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first div._42ef").text();
-			if (contents.indexOf(fbname+' was tagged in') != -1 && contents.indexOf(' photo.') != -1) {
-				dlphoto();
+    if (!inited) {
+		activityheight = 0;
+        console.log('> Activate all years and months...');
+		// Tickle all the years and months to make sure all activity data are loaded
+        $("div#rightColContent ul.fbTimelineLogScrubber li a").each(function() {
+           $(this).simulateClick('click');
+        });
+        inited = true;
+        var checkFinish = setInterval(function() {
+			// Kind of primitive, but check the height of the activity log box every 5 seconds. If it remains the same after 5 seconds, we assume all data has finished loading.
+			if ($("#fbTimelineLogBody").height() != activityheight) {
+				activityheight = $("#fbTimelineLogBody").height();
 			} else {
-				//console.log('> Not a relevant activity, skipping.');
-				$("#fbTimelineLogBody div._5shk:not(.fbprocessed):first").addClass('fbprocessed');
+				console.log('> Finished loading all data! Proceeding to download photos...');
+				clearInterval(checkFinish);
+				return;
 				andrewhandler();
 			}
+		}, 5000);
+    } else {
+        if (!firstrun) {
+            scrollTo(0, 0);
+            firstrun = true;
+        }
+		if (retry < retries) {
+			if (!$("#fbTimelineLogBody div._5shk:not(.fbprocessed)").length) {
+				if ($("#fbTimelineLogBody a.uiMorePagerPrimary").length) {
+					$("#fbTimelineLogBody a.uiMorePagerPrimary").each(function() {
+					   $(this).simulateClick('click');
+					});
+					retry = 0;
+					console.log($("#fbTimelineLogBody a.uiMorePagerPrimary").length+" More Activity Links Exist");
+					setTimeout(function() { andrewhandler(); }, 500);
+					return;
+				}
+				setTimeout(function() { andrewhandler(); }, 500);
+				retry++;
+				console.log('Seems to be done. '+retry+'/'+retries);
+			} else {
+				retry = 0;
+				contents = $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first div._42ef").text();
+				if (contents.indexOf(fbname+' was tagged in') != -1 && contents.indexOf(' photo.') != -1) {
+					dlphoto();
+				} else {
+					//console.log('> Not a relevant activity, skipping.');
+					$("#fbTimelineLogBody div._5shk:not(.fbprocessed):first").addClass('fbprocessed');
+					andrewhandler();
+				}
+			}
+		} else {
+			alert('Done!');
 		}
-	} else {
-		alert('Done!');
-	}
+    }
 }
 
 function dlphoto() {
-    code = $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first td._5ep6 a").attr('href');
-	regexp = /\?fbid=([0-9]+)&/g;
+    code = $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first td._5ep6 a img").attr('src');
+	regexp = /\/[0-9]+_([0-9]+)_[0-9]+_/g;
 	match = regexp.exec(code);
-	if (match[1]) {
-		$("body").append("<iframe class='picdl' src='https://www.facebook.com/photo/download/?fbid="+match[1]+"'></iframe>");
-	}
+	if (match[1]) $("body").append("<iframe src='https://www.facebook.com/photo/download/?fbid="+match[1]+"'></iframe>");
     $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first").addClass('fbprocessed');
     setTimeout(andrewhandler, 1500);
 }
