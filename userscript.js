@@ -3,6 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity?privacy_source=activity_log&log_filter=cluster_200
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
+// @version			1.4
 // @description		Download all Facebook photos that you are tagged in.
 // ==/UserScript==
 
