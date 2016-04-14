@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity?privacy_source=activity_log&log_filter=cluster_200
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.0
+// @version			1.1
 // @description		Download all Facebook photos that you are tagged in.
 // ==/UserScript==
 
@@ -106,7 +106,12 @@ function dlphoto() {
     code = $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first td._5ep6 a").attr('href');
 	regexp = /\?fbid=([0-9]+)&/g;
 	match = regexp.exec(code);
-	if (match[1]) $("body").append("<iframe src='https://www.facebook.com/photo/download/?fbid="+match[1]+"'></iframe>");
+	if (match[1]) {
+		$("body").append("<iframe class='picdl' src='https://www.facebook.com/photo/download/?fbid="+match[1]+"'></iframe>");
+		$('iframe.picdl').load(function(){
+			$(this).remove();
+		}
+	}
     $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first").addClass('fbprocessed');
     setTimeout(andrewhandler, 1500);
 }
