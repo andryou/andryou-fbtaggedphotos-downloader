@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity?privacy_source=activity_log&log_filter=cluster_200
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.5
+// @version			1.6
 // @description		Download all Facebook photos that you are tagged in.
 // ==/UserScript==
 
@@ -36,7 +36,7 @@ jQuery.fn.simulateClick = function() {
     });
 };
 function triggerdl() {
-	if (confirm('Are you sure you wish to continue? Chrome may tell you that this page is attempting to download multiple files: please click on Allow.')) {
+	if (confirm('Are you sure you wish to continue? Chrome may tell you that this page is attempting to download multiple files: please click on Allow. After you do so, please avoid scrolling this page.')) {
 		inited = false;
 		firstrun = false;
 		retry = 0;
@@ -70,7 +70,7 @@ function andrewhandler() {
 			}
 		}
 	} else {
-		alert('Done!');
+		alert('Done scrolling! Please wait for all photos to be downloaded.');
 	}
 }
 
