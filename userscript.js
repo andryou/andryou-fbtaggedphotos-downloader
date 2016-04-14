@@ -3,7 +3,7 @@
 // @include			https://www.facebook.com/*/allactivity?privacy_source=activity_log&log_filter=cluster_200
 // @require			http://code.jquery.com/jquery-1.7.1.min.js
 // @grant			none
-// @version			1.9
+// @version			2.0
 // @description		Download all Facebook photos that you are tagged in.
 // ==/UserScript==
 
@@ -49,7 +49,7 @@ function andrewhandler() {
 		} else {
 			retry = 0;
 			contents = $("#fbTimelineLogBody div._5shk:not(.fbprocessed):first div._42ef").text();
-			if (contents.indexOf(fbname+' was mentioned in a post.') != -1 || (contents.indexOf(fbname+' was tagged in') != -1 && contents.indexOf(' photo.') != -1)) {
+			if (contents.indexOf(fbname+' was tagged in') != -1 && contents.indexOf(' photo.') != -1) {
 				dlphoto();
 			} else {
 				//console.log('> Not a relevant activity, skipping.');
